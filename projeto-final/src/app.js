@@ -14,6 +14,11 @@ app.use(express.json())
 app.use(cors())
 
 const dadosRotas = require("./routes/dadosRotas")
+const usuarioRotas = require("./routes/usuarioRoutes")
+
 
 app.use("/cadastro", dadosRotas)
+app.use("/usuario", usuarioRotas)
+
+
 module.exports = app
