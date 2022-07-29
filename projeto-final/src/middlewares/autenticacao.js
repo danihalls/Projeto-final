@@ -1,27 +1,29 @@
 const jwt = require("jsonwebtoken")
+const SECRET = process.env.SECRET
 
 
 
 exports.checkAuth = (req, res, next) => {
-    const header = req.headers["authorization"]
-    const token = header && header.split(" ")[1]
-
-    if(!token) {
-        return res.status(401).json({
-            message: "Acesso negado"
-        })
+    const authHeader = req.get('authorization')
+    console.log("AUTH HEADER", authHeader)
+    const token = authHeader.split(' ')[1];
+    console.log("TOKEN", token)
+    
+    if (!token) {
+      return res.status(401).send("Erro no header")
     }
 
     try {
-        const SECRET = process.env.SECRET
+        jwt.verify(token, SECRET, (error) => {
+            if(error) {
+                return res.status(401).send("Não autorizado")
+            }
+        });
 
-        jwt.verify(token, SECRET)
-
-        next()
-        
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
+        next();
+          
+    } catch(error) {
+        console.error(error);
     }
 }
+

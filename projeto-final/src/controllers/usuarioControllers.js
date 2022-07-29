@@ -5,27 +5,31 @@ const jwt = require("jsonwebtoken")
 
 
 const cadastrarUsuario = async (req, res) => {
+   
     try {
+       
         const {email, password} = req.body
 
-        const novoUsuario = new usuario({
+        const novoUsuario = new Usuario({
             email,
             password
         })
-        
-        const passwordHashed = await hashPassword(novoUsuario.password.res)
+       
+        const passwordHashed = await hashPassword(novoUsuario.password, res)
         novoUsuario.password = passwordHashed
-
-        const usuario = await usuario.findOne({email: req.body.email})
+       
+        const usuario = await Usuario.findOne({email: req.body.email})
+        
         if(usuario){
             res.status(400).json({message: "Usuário já cadastrado no sistema"})
         }
 
         const salvarUsuario = await novoUsuario.save()
-
+        
         res.status(201).json({
-            message: "Cadastro efetuado com sucesso",
+            message: "Cadastro efetuado com sucesso!",
             salvarUsuario
+
         })
 
     } catch (error) {
@@ -35,10 +39,10 @@ const cadastrarUsuario = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
-    try {
-        const {email, password} = req.body
-        const usuario = await Usuario.findOne({email: email}).select("password")
+    const login = async (req, res) => {
+        try {
+            const {email, password} = req.body
+            const usuario = await Usuario.findOne({email: email}).select("password")
 
         if(!usuario){
             return res.status(400).json({message: "Email ou senha incorreto"})
@@ -66,6 +70,7 @@ const login = async (req, res) => {
 }
 
 const listarUsuarios = async (req, res) => {
+    
     try {
         const usuario = await Usuario.find()
 
@@ -89,7 +94,7 @@ const listarUsuarios = async (req, res) => {
 
 
 
-module.export = {
+module.exports = {
     cadastrarUsuario,
     login,
     listarUsuarios
