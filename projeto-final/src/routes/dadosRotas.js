@@ -7,17 +7,21 @@ const controller = require('../controllers/dadosControllers')
 // nossas rotas
 const router = express.Router()
 
+//criar
 router.post("/create", controller.cadastrarDado)
 
-// primeiro get -
-//          path + endpoint | controller
-/**
- * /biblioteca -> endpoint
- */
-/*router.get('/biblioteca',      controller.findAllEbooks)
-router.get("/titulo", controller.findOneEbookByTitle)
+//deletar
+router.delete("/delete/:id", controller.deletarDados)
 
-router.get('/:id', controller.findById)
-router.post("/create", controller.createEbook)*/
+//listar
+router.get("/list", controller.listarDados)
+
+//listar por id
+router.get("/list/:id", controller.listarDadosPorId)
+
+//atualizar por id
+router.put("/update/:id", controller.atualizarDadosPorId)
+
+
 
 module.exports = router
